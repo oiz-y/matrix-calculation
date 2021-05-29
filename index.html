@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Calculation</title>
+    <style>
+    body {
+        background-color: #232F3E;
+        color:#ffffff;
+        font-size: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+        }
+    .calcArea {
+      margin: 20px;
+    }
+    </style>
+</head>
+<body>
+<div class="matrixSetting">
+
+  <div class="selectSize" style="margin: 20px;">
+    行数
+    <select id="rowPulldown" class="selectRowSize">
+      <option>選択してください</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+    </select>
+    列数
+    <select class="selectColSize">
+      <option>選択してください</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+    </select>
+  </div>
+</div>
+
+<div class="matrixSize">
+  <p style="margin: 10px;">行列のサイズ</p>
+  <div id="row" class="rowSize" style="display: inline; margin-left: 10px;"></div>行
+  <div id="col" class="colSize" style="display: inline; margin-left: 10px;"></div>列
+  <button id="clickSize" style="margin-left: 10px;">決定</button>
+  </button>
+</div>
+
+<div class="matrixValue" style="margin: 10px;">
+  <span class="matrixTableComment"></span>
+  <div class="matrixTable"></div>
+</div>
+
+  <div id="calcArea" class="calcArea"></div>
+
+
+<div class="calcOption" style="margin: 20px;">
+  <button id="matrixSum" class="operation">+</button>
+  <button id="matrixCalc" class="operation">計算する</button>
+  <button id="clear" class="operation">クリア</button>
+</div>
+
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    TeX: { equationNumbers: { autoNumber: "AMS" }},
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { matchFontHeight: false },
+    textAlign: "left",
+    textIndent: "2em"
+    });
+  </script>
+  <script src="main.js"></script>
+</body>
+</html>
