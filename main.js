@@ -6,6 +6,10 @@ const clearButton = document.getElementById('clear');
 clearButton.addEventListener('click', () => {
   document.getElementById('calcArea').innerHTML = '';
   globalText = '';
+  const inputElements = document.querySelectorAll('input');
+  for (let i = 0; i < inputElements.length; i++) {
+    inputElements[i].value = '';
+  }
 })
 
 selectEventHandler(selectRowSize);
