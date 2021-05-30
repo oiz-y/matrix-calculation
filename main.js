@@ -20,16 +20,23 @@ const col = document.getElementById('col');
 const buttonMatrixSize = document.getElementById('clickSize');
 setMatrixSize(buttonMatrixSize, row, col);
 
-const matrixSum = document.getElementById('matrixSum');
-const matrixCalc = document.getElementById('matrixCalc');
-matrixSum.addEventListener('click', () => {
+const sumButton = document.getElementById('sumButton');
+const subtractionButton = document.getElementById('subtractionButton');
+const calcButton = document.getElementById('calcButton');
+sumButton.addEventListener('click', () => {
   globalText += ' $+$ ';
   const calcArea = document.getElementById('calcArea');
   calcArea.innerHTML = globalText;
   MathJax.Hub.Typeset(calcArea);
 });
+subtractionButton.addEventListener('click', () => {
+  globalText += ' $-$ ';
+  const calcArea = document.getElementById('calcArea');
+  calcArea.innerHTML = globalText;
+  MathJax.Hub.Typeset(calcArea);
+});
 
-matrixCalc.addEventListener('click', addition);
+calcButton.addEventListener('click', calc);
 
 function selectEventHandler(element) {
   element.addEventListener('change', (event) => {
@@ -112,10 +119,18 @@ function displayMatirix() {
   MathJax.Hub.Typeset(calcArea);
 }
 
+function calc() {
+  if (globalText.split('+').length === 2) {
+    addition();
+  } else if (globalText.split('-').length === 2) {
+    subtraction();
+  }
+}
+
 function addition() {
   const calcArea = document.getElementById('calcArea');
-  const arrayAll = transformTextToTwoArray();
-  const matrixSize = getSize();
+  const arrayAll = transformTextToTwoArray('+');
+  const matrixSize = getSize('+');
   let result = getZeroMatrix(matrixSize.rowLength, matrixSize.colLength);
 
     for (let j = 0; j < arrayAll[0].length; j++) {
@@ -128,13 +143,29 @@ function addition() {
   calcArea.innerHTML = globalText;
   MathJax.Hub.Typeset(calcArea);
 }
+function subtraction() {
+  const calcArea = document.getElementById('calcArea');
+  const arrayAll = transformTextToTwoArray('-');
+  const matrixSize = getSize('-');
+  let result = getZeroMatrix(matrixSize.rowLength, matrixSize.colLength);
 
-function getSize() {
+    for (let j = 0; j < arrayAll[0].length; j++) {
+      for (let k = 0; k < matrixSize.colLength; k++) {
+        result[j][k] = parseInt(arrayAll[0][j][k], 10) - parseInt(arrayAll[1][j][k], 10);
+      }
+    }
+  resultText = transformArrayToText(result)
+  globalText += giveMathjaxCharacter(resultText);
+  calcArea.innerHTML = globalText;
+  MathJax.Hub.Typeset(calcArea);
+}
+
+function getSize(operator) {
   let matrixSize = {};
   let rowLength = 0;
   let colLength = 0;
-  let array = globalText.split('+');
-  splitArray = array[0].replace(/[^\d^&^\\]/g, '').split('\\\\');
+  let array = globalText.split(operator);
+  splitArray = array[0].replace(/[^\d^&^\\^-]/g, '').split('\\\\');
 
   for (let i = 0; i < splitArray.length; i++) {
     if (splitArray[i] !== '') {
@@ -154,8 +185,8 @@ function getSize() {
   return matrixSize;
 }
 
-function transformTextToTwoArray () {
-  let array = globalText.split('+');
+function transformTextToTwoArray(operator) {
+  let array = globalText.split(operator);
   let arrayAll = [];
   for (let k = 0; k < array.length; k++) {
     tmpArray = [];
