@@ -115,34 +115,57 @@ function displayMatirix() {
 function addition() {
   const calcArea = document.getElementById('calcArea');
   const arrayAll = transformTextToTwoArray();
-  let result = getZiroMatrix(arrayAll.length, arrayAll[0].length);
+  const matrixSize = getSize();
+  let result = getZeroMatrix(matrixSize.rowLength, matrixSize.colLength);
 
-  for (let i = 0; i < arrayAll.length; i++) {
-    for (let j = 0; j < arrayAll[i].length; j++) {
-      for (let k = 0; k < arrayAll[i][j].length; k++){
-        result[j][k] = Number(result[j][k]) + Number(arrayAll[i][j][k]);
+    for (let j = 0; j < arrayAll[0].length; j++) {
+      for (let k = 0; k < matrixSize.colLength; k++) {
+        result[j][k] = parseInt(arrayAll[0][j][k], 10) + parseInt(arrayAll[1][j][k], 10);
       }
     }
-  }
   resultText = transformArrayToText(result)
   globalText += giveMathjaxCharacter(resultText);
   calcArea.innerHTML = globalText;
   MathJax.Hub.Typeset(calcArea);
 }
 
+function getSize() {
+  let matrixSize = {};
+  let rowLength = 0;
+  let colLength = 0;
+  let array = globalText.split('+');
+  splitArray = array[0].replace(/[^\d^&^\\]/g, '').split('\\\\');
+
+  for (let i = 0; i < splitArray.length; i++) {
+    if (splitArray[i] !== '') {
+      rowLength += 1;
+    }
+  }
+  for (let i = 0; i < splitArray.length; i++) {
+    if (splitArray[i] !== '') {
+      for (let j = 0; j < splitArray[i].split('&').length; j++) {
+        colLength += 1;
+      }
+      break;
+    }
+  }
+  matrixSize.rowLength = rowLength;
+  matrixSize.colLength = colLength;
+  return matrixSize;
+}
+
 function transformTextToTwoArray () {
   let array = globalText.split('+');
   let arrayAll = [];
-  for (let i = 0; i < array.length; i++) {
-    let arrayTmp = [];
-    const rowMat =
-      globalText.split('+')[i].replace(/[^\d^&^\\]/g, '').split('\\\\');
-    for (let j = 0; j < rowMat.length - 1; j++) {
-      if (rowMat[j] !== '') {
-        arrayTmp.push(rowMat[j].split('&'));
+  for (let k = 0; k < array.length; k++) {
+    tmpArray = [];
+    let splitArray = array[k].replace(/[^\d^&^\\]/g, '').split('\\\\');
+    for (let i = 0; i < splitArray.length; i++) {
+      if (splitArray[i] !== '') {
+        tmpArray.push(splitArray[i].split('&'));
       }
     }
-    arrayAll.push(arrayTmp);
+    arrayAll.push(tmpArray)
   }
   return arrayAll;
 }
@@ -168,8 +191,8 @@ function giveMathjaxCharacter(resultText) {
   return text;
 }
 
-function getZiroMatrix(rowLength, colLength) {
-  const array = []
+function getZeroMatrix(rowLength, colLength) {
+  const array = [];
   for (let i = 0; i < rowLength; i++) {
     array.push([]);
     for (let j = 0; j < colLength; j++){
@@ -180,7 +203,6 @@ function getZiroMatrix(rowLength, colLength) {
 }
 
 function setElement(dependent, insertMethod, tag, attrObj, text) {
-
   let dependentElement;
   if (typeof (dependent) === 'string') {
     dependentElement = document.getElementById(dependent);
