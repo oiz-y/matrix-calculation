@@ -121,37 +121,26 @@ function displayMatirix() {
 
 function calc() {
   if (globalText.split('+').length === 2) {
-    addition();
+    calcAddSubt('+');
   } else if (globalText.split('-').length === 2) {
-    subtraction();
+    calcAddSubt('-');
   }
 }
 
-function addition() {
+function calcAddSubt(operator) {
   const calcArea = document.getElementById('calcArea');
-  const arrayAll = transformTextToTwoArray('+');
-  const matrixSize = getSize('+');
+  const arrayAll = transformTextToTwoArray(operator);
+  console.log(arrayAll)
+  const matrixSize = getSize(operator);
   let result = getZeroMatrix(matrixSize.rowLength, matrixSize.colLength);
 
     for (let j = 0; j < arrayAll[0].length; j++) {
       for (let k = 0; k < matrixSize.colLength; k++) {
-        result[j][k] = parseInt(arrayAll[0][j][k], 10) + parseInt(arrayAll[1][j][k], 10);
-      }
-    }
-  resultText = transformArrayToText(result)
-  globalText += giveMathjaxCharacter(resultText);
-  calcArea.innerHTML = globalText;
-  MathJax.Hub.Typeset(calcArea);
-}
-function subtraction() {
-  const calcArea = document.getElementById('calcArea');
-  const arrayAll = transformTextToTwoArray('-');
-  const matrixSize = getSize('-');
-  let result = getZeroMatrix(matrixSize.rowLength, matrixSize.colLength);
-
-    for (let j = 0; j < arrayAll[0].length; j++) {
-      for (let k = 0; k < matrixSize.colLength; k++) {
-        result[j][k] = parseInt(arrayAll[0][j][k], 10) - parseInt(arrayAll[1][j][k], 10);
+        if (operator === '+') {
+          result[j][k] = parseInt(arrayAll[0][j][k], 10) + parseInt(arrayAll[1][j][k], 10);
+        } else if (operator === '-') {
+          result[j][k] = parseInt(arrayAll[0][j][k], 10) - parseInt(arrayAll[1][j][k], 10);
+        }
       }
     }
   resultText = transformArrayToText(result)
@@ -166,6 +155,7 @@ function getSize(operator) {
   let colLength = 0;
   let array = globalText.split(operator);
   splitArray = array[0].replace(/[^\d^&^\\^-]/g, '').split('\\\\');
+  console.log(splitArray)
 
   for (let i = 0; i < splitArray.length; i++) {
     if (splitArray[i] !== '') {
@@ -190,7 +180,7 @@ function transformTextToTwoArray(operator) {
   let arrayAll = [];
   for (let k = 0; k < array.length; k++) {
     tmpArray = [];
-    let splitArray = array[k].replace(/[^\d^&^\\]/g, '').split('\\\\');
+    let splitArray = array[k].replace(/[^\d^&^\\^-]/g, '').split('\\\\');
     for (let i = 0; i < splitArray.length; i++) {
       if (splitArray[i] !== '') {
         tmpArray.push(splitArray[i].split('&'));
